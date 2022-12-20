@@ -5,6 +5,12 @@ const app = express();
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static("public"));
 
+const config = require("./config.json");
+const apikey = config.API_KEY;
+const listID = config.LIST_ID;
+console.log(apikey);
+console.log(listID);
+
 app.get("/",(req,res)=>{
     res.sendFile(__dirname+"/signup.html");
 });
@@ -26,8 +32,6 @@ app.post("/",(req,res)=>{
         ]
     };
     const jsondata = JSON.stringify(data);
-    const apikey = config.API_KEY;
-    const listID = config.LIST_ID;
     const url = "https://us21.api.mailchimp.com/3.0/lists/"+listID;
     const options = {
         method: "POST",
@@ -38,6 +42,7 @@ app.post("/",(req,res)=>{
             res.sendFile(__dirname+"/success.html");
         }
         else{
+            console.log(response.statusCode);
             res.sendFile(__dirname+"/failure.html");
         }
     });
@@ -52,6 +57,3 @@ app.post("/failure",(req,res)=>{
 app.listen(process.env.PORT || 3000,()=>{
     console.log("Running on port 3000.");
 });
-
-// 92f11e99bc48f9d401c8719068559bbc-us21
-// 96a9efeb85
